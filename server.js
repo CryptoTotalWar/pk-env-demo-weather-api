@@ -1,14 +1,15 @@
 const express = require("express");
-const dotenv = require("dotenv");
-dotenv.config(); // Load environment variables from .env
-
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Route that handles the root URL
 app.get("/", (req, res) => {
-  // Directly define the HTML content with the API key dynamically injected
-  const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY || "placeholder-api-key";
+  const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY;
+  if (!apiKey) {
+    console.error("API key not set in environment variables");
+    res.status(500).send("Server configuration error");
+    return;
+  }
+
   const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -23,18 +24,16 @@ app.get("/", (req, res) => {
     <div id="weatherData"></div>
 
     <script>
-      window.apiKey = "${apiKey}";
+      window.apiKey = ${JSON.stringify(apiKey)};
     </script>
     <script src="script.js"></script>
 </body>
 </html>
-    `;
-
-  console.log(`API Key being sent: ${apiKey}`); // This logs the API key being used for debugging purposes
-  res.send(htmlContent); // Send the dynamically created HTML content to the client
+  `;
+  console.log(`API Key being sent: ${apiKey}`);
+  res.send(htmlContent);
 });
 
-// Serve static files like CSS and JavaScript
 app.use(express.static(__dirname));
 
 app.listen(port, () => {

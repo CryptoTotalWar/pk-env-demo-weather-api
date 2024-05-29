@@ -6,10 +6,19 @@ async function fetchWeather() {
   try {
     const response = await fetch(url);
     const data = await response.json();
-    document.getElementById(
-      "weatherData"
-    ).innerHTML = `Temperature: ${data.main.temp}°C`;
+    if (data.main && data.main.temp) {
+      document.getElementById(
+        "weatherData"
+      ).innerHTML = `Temperature: ${data.main.temp}°C`;
+    } else {
+      document.getElementById(
+        "weatherData"
+      ).innerHTML = `Error: ${data.message}`;
+    }
   } catch (error) {
     console.error("Error:", error);
+    document.getElementById(
+      "weatherData"
+    ).innerHTML = `Error fetching weather data.`;
   }
 }
