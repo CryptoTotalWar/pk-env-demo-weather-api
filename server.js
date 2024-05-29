@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config(); // Load environment variables from .env
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => {
   const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY;
