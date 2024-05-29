@@ -1,7 +1,8 @@
 async function fetchWeather() {
   const cityName = document.getElementById("cityInput").value;
   const apiKey = window.apiKey; // Use the globally injected API key
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
+  // Add '&units=metric' to ensure temperature is in Celsius
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
 
   try {
     const response = await fetch(url);
@@ -11,9 +12,10 @@ async function fetchWeather() {
         "weatherData"
       ).innerHTML = `Temperature: ${data.main.temp}°C`;
     } else {
-      document.getElementById(
-        "weatherData"
-      ).innerHTML = `Error: ${data.message}`;
+      // Improve the error display to provide more specific feedback
+      document.getElementById("weatherData").innerHTML = `Error: ${
+        data.message || "Weather data not found"
+      }`;
     }
   } catch (error) {
     console.error("Error:", error);
