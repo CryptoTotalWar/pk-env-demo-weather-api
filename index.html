@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather Demo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <input type="text" id="cityInput" placeholder="Enter City Name" />
+    <button onclick="fetchWeather()">Get Weather</button>
+    <div id="weatherData"></div>
+
+    <!-- Placeholder for the API key -->
+    <script>
+      window.apiKey = "{{API_KEY}}";
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
