@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "polykey secrets env --env Weather-Ops:OPEN_WEATHER_MAP_API_KEY -- node server.js",
+    "start:normal": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
