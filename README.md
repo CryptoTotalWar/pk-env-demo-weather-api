@@ -40,7 +40,11 @@ In the traditional-env branch, the `.env` file stores sensitive information like
 
 ### Polykey Branch
 
-**Pre-requisite:** Setup Polykey by following the [Polykey Documentation](https://polykey.com/docs/tutorials/polykey-cli/).
+**Pre-requisite:**
+
+- Setup Polykey by following the [Polykey Documentation](https://polykey.com/docs/tutorials/polykey-cli/).
+- Use the same VaultName "**Weather-Ops**" and secretsName "**OPEN_WEATHER_MAP_API_KEY**" to align with the **package.json** script and **server.js** logic.
+  - If you choose to use different names, you'll need to configure the code accordingly.
 
 1. **Create a Temporary Text File:**
    Outside of the repo, create a temporary text file named **"OPEN_WEATHER_MAP_API_KEY.txt"** and add your API key.
@@ -75,14 +79,14 @@ Run **`npm start`** to initiate the project. using Polykey's environment managem
 
 ## Key Differences Between Branches
 
-The **`server.js`** script and **`package.json`** within the Polykey branch are configured as follows to replace .env:
+- **Traditional-env:** Uses dotenv to load environment variables from `.env` files into `process.env`:
 
 ```bash
-const port = process.env.PORT || 3000;
-
-app.get("/", (req, res) => {
-  const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY;
+require('dotenv').config();
+const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY;
 ```
+
+- **Polykey:** Replaces dotenv with Polykey, which securely injects environment variables directly from encrypted vaults:
 
 ```bash
 "scripts": {
@@ -90,7 +94,7 @@ app.get("/", (req, res) => {
 }
 ```
 
-This setup ensures that the `polykey secrets env` command is executed before the Node.js server starts, securely injecting environment variables directly from Polykey into the application runtime.
+This script ensures that the polykey secrets env command runs before the server starts, injecting the API key into the environment.
 
 ## Educational Insight
 
