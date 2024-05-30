@@ -2,44 +2,50 @@
 
 ## Introduction
 
-This repository demonstrates the transition from using traditional `.env` files for managing environment variables in Node.js applications to a more secure and robust method using Polykey. This transition is illustrated across three branches:
+This repository provides a hands-on demonstration of replacing traditional `.env` files with Polykey for managing environment variables in Node.js applications. It includes two branches:
 
-- **main**: Contains only a README that guides through the repository.
-- **traditional-env**: Demonstrates the traditional approach using `.env` files to handle environment variables.
-- **Polykey**: Showcases the replacement of the `.env` method with Polykey's `secrets env` method for more secure and dynamic environment variable management.
+- **traditional-env**: Showcases a simple Node.js project fetching temperatures for any city using the dotenv method.
+- **Polykey**: Illustrates replacing dotenv with Polykey for more secure and dynamic environment variable management.
+  The main branch contains this README, guiding you through the demonstration and explaining how to replicate these methods in your own Node.js projects.
 
 ## Purpose of This Demonstration
 
-The aim of this demonstration is to highlight the advantages of using Polykey for environment variable management over the traditional `.env` file approach. By encrypting secrets and dynamically injecting them into the application environment, Polykey significantly reduces the risks associated with plaintext storage and accidental exposure of sensitive data, making it a superior choice for managing sensitive configurations in production environments.
+The aim is to highlight the advantages of using Polykey over the traditional `.env` approach, emphasizing how Polykey enhances security by encrypting secrets and dynamically injecting them into the application environment, thereby reducing the risks associated with plaintext storage and accidental exposure of sensitive data.
 
 ## Getting Started
 
-Clone this repository to your local machine and open it with your preferred Integrated Development Environment (IDE) such as Visual Studio Code or IntelliJ:
+Clone the repository and explore different implementations:
 
 ```bash
 git clone https://github.com/CryptoTotalWar/pk-env-demo-weather-api.git
 ```
 
-Explore the different branches to see the distinct imlementations and configurations for each method of managing environment variables.
+Follow the instructions below for each branch to understand how each method manages environment variables.
 
 ## Branch Instructions
 
+<!-- make a note here that users need to fetch and pull all the remote repos and install dependancies and checkout to the traditional-env branch to get started -->
+
 ### Traditional-env Branch
 
-1. **Create your own `.env` file** at the root of the project.
-2. Add `OPEN_WEATHER_MAP_API_KEY=` to the file.
-3. Sign up at [OpenWeatherMap API](https://openweathermap.org/api) and obtain your API key.
+1. **Create your `.env` file** at the root of the project.
+2. Add `OPEN_WEATHER_MAP_API_KEY=` followed by your API Key.
+3. Obtain an API key by signing up at [OpenWeatherMap API](https://openweathermap.org/api).
 4. Place your API key after `OPEN_WEATHER_MAP_API_KEY=` in your `.env` file.
-5. Run `npm start` to launch the project on `localhost:3001`. Open your browser and input a city like "Miami" to see that the API is operational, displaying weather data. Additionally, check your terminal to observe how the API key is served from your `.env` file.
+5. Run `npm start` to launch the project on `localhost:3001`. Input a city like "Miami" in your browser to verify the API's functionality and observe the terminal to see how the API key is served from your `.env` file.
+
+### How `.env` works
+
+In the traditional-env branch, the `.env` file stores sensitive information like API keys in plain text. When `npm start` is executed, the dotenv library loads these variables into `process.env`, making them accessible throughout the application. This method, while mostly secure, poses some common security vulnerabilities such as x, y, z.
 
 ### Polykey Branch
 
-This branch requires prior setup (installation & bootstrapping) of Polykey. For setup instructions, visit theThe following requires prior setup (installation & bootstrapping) of Polykey. For guidance on setting up Polykey, refer to the [Polykey Documentation](https://polykey.com/docs/tutorials/polykey-cli/).
+**Pre-requisite:** Setup Polykey by following the [Polykey Documentation](https://polykey.com/docs/tutorials/polykey-cli/).
 
 1. **Create a Temporary Text File:**
-   Outside of the repo, create a temporary text file named **"OPEN_WEATHER_MAP_API_KEY.txt"** on your local directory, and add your API key.
+   Outside of the repo, create a temporary text file named **"OPEN_WEATHER_MAP_API_KEY.txt"** and add your API key.
 
-   **TIP:** Quick command to create the text file:
+   **TIP:** Use the following command to create the file quickly:
 
    ```bash
    echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
@@ -47,19 +53,17 @@ This branch requires prior setup (installation & bootstrapping) of Polykey. For 
 
    **Important Configuration Notes:**
 
-   - I recommend following this demo using the same VaultName "**Weather-Ops**" and secret name "**OPEN_WEATHER_MAP_API_KEY**" but if you choose to use a different VaultName or secret name, ensure you configure the **package.json** and **server.js** accordingly to match these names.
+   - I recommend following this demo using the same VaultName "**Weather-Ops**" and secret name "**OPEN_WEATHER_MAP_API_KEY**" but if you choose to use a different vaultName or secretName, ensure you configure the **package.json** and **server.js** accordingly to match these names.
 
-2. **Create a Vault:**
-
-After starting your Polykey agent, create a vault named "Weather-Ops":
+2. **Start Polykey & Create a Vault named "Weather-Ops":**
 
 ```bash
 polykey vaults create Weather-Ops
 ```
 
-3. **Add Your Environment Variable as a Secret:**
+3. **Add Your API Key as a Secret:**
 
-Convert your environment variable into a secret within the vault:
+Convert your environment variable (the text file) into a secret within the vault:
 
 ```bash
 polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_MAP_API_KEY
@@ -69,7 +73,7 @@ polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_M
 
 Run **`npm start`** to initiate the project. using Polykey's environment management. This leverages the polykey secrets env command from the **`package.json`** script, dynamically injecting the API key into your environment. Visit **`localhost:3000`** in your browser, input a city like "Miami", and verify the API's functionality. Note the terminal output for how the API key is dynamically injected.
 
-## CEducational Insight
+## Key Differences Between Branches
 
 The **`server.js`** script and **`package.json`** within the Polykey branch are configured as follows to replace .env:
 
@@ -87,6 +91,16 @@ app.get("/", (req, res) => {
 ```
 
 This setup ensures that the `polykey secrets env` command is executed before the Node.js server starts, securely injecting environment variables directly from Polykey into the application runtime.
+
+## Educational Insight
+
+### How `.env` works
+
+In the traditional-env branch, the `.env` file stores sensitive information like API keys in plain text. When `npm start` is executed, the dotenv library loads these variables into `process.env`, making them accessible throughout the application. This method, while mostly secure, poses some common security vulnerabilities such as x, y, z.
+
+### How Polykey Works
+
+In the Polykey branch, secrets are not stored locally but securely within Polykey vaults. The `polykey secrets env` command, specified in the `package.json`, retrieves the secrets and injects them directly into the process environment when the application starts. This method ensures that secrets are encrypted at rest, only exposed in memory, and not directly accessible from the filesystem.
 
 ## Conclusion
 
