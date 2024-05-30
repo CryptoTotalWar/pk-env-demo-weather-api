@@ -1,79 +1,63 @@
-# Replacing .env with Polykey in Node.js Projects
+# Replacing .env with Polykey
 
 ## Introduction
 
-This repository demonstrates the transition from using traditional .env files for managing environment variables in Node.js applications to a more secure and robust method using Polykey. You will find three branches here: `main` (using traditional .env), `traditional-env` (structured similar to Polykey branch but still using .env), and `Polykey`.
+This repository provides a practical demonstration of transitioning from using traditional `.env` files for managing environment variables in Node.js applications to a more secure and robust method using Polykey. This is illustrated across three branches:
+
+- **main**: Contains only a README that guides through the repository.
+- **traditional-env**: Demonstrates the traditional approach using `.env` files to handle environment variables.
+- **Polykey**: Showcases the replacement of the `.env` method with Polykey's `secrets env` method for a more secure and dynamic environment variable management.
+
+## Purpose of This Demonstration
+
+The purpose of this demonstration is to illustrate the benefits of using Polykey for environment variable management over the traditional `.env` file approach. Polykey enhances security by encrypting secrets and dynamically injecting them into the application environment, thereby reducing the risks associated with plaintext storage and accidental exposure of sensitive data.
 
 ## Getting Started
 
-To get started with this demonstration, first clone the repository:
+To get started, clone this repository using the command below and open it with your preferred IDE (e.g., Visual Studio Code, IntelliJ):
 
 ```bash
 git clone https://github.com/CryptoTotalWar/pk-env-demo-weather-api.git
-cd pk-env-demo-weather-api
 ```
 
-Switch between the different branches to see the implementations and configurations.
+Switch between the different branches to explore the implementations and configurations specific to each method of managing environment variables.
+
+## Branch Instructions
 
 ### Traditional-env Branch
 
-1. **Setup**:
-
-   - Clone the repository and checkout to the `traditional-env` branch.
-   - Create an `.env` file in the root directory.
-   - Sign up at [OpenWeatherMap API](https://openweathermap.org/api) to get your API key.
-   - Add your API key to the `.env` file as follows:
-     ```plaintext
-     OPEN_WEATHER_MAP_API_KEY=your_api_key_here
-     ```
-   - Run `npm install` to install dependencies.
-
-2. **Run the Application**:
-
-   - Execute `npm start` to start the server.
-   - Open your web browser and go to `http://localhost:3001`.
-   - Type a city name like "Miami" to fetch and display weather data.
-
-3. **Understanding the Traditional .env Method**:
-   - The `.env` file stores sensitive API keys and other environment variables in plaintext.
-   - The `dotenv` package is used to load these variables into `process.env` in your Node.js application.
+1. **Create your own `.env` file** at the root of the project.
+2. Add `OPEN_WEATHER_MAP_API_KEY=` to the file.
+3. Sign up at [OpenWeatherMap API](https://openweathermap.org/api) and obtain your API key.
+4. Place your API key after `OPEN_WEATHER_MAP_API_KEY=` in your `.env` file.
+5. Run `npm start` to launch the project on `localhost:3001`. Open your browser, input a city like "Miami" in the application to see that the API is working and displaying weather data. Additionally, observe in your terminal how the API key is served from your `.env` file.
 
 ### Polykey Branch
 
-1. **Setup**:
+1. **Create a text file named "OPEN_WEATHER_MAP_API_KEY.txt"** and insert your API key as its content.
+2. Save this file as a secret named `OPEN_WEATHER_MAP_API_KEY` in a local directory outside of your repo.
+3. Use the following terminal commands to quickly add your secret in Polykey:
 
-   - Checkout to the `Polykey` branch.
-   - Create a text file named `OPEN_WEATHER_MAP_API_KEY.txt` and write your OpenWeatherMap API key inside it.
-   - Save this key as a secret in Polykey using the following terminal commands:
-     ```bash
-     echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
-     polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_MAP_API_KEY
-     ```
-   - Run `npm install` if not already done.
+   ```bash
+   echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
+   ```
 
-2. **Run the Application with Polykey**:
+4. Create your vault
+   ```bash
+   polykey vaults create Weather-Ops
+   ```
+5. Add your secret to the vault
 
-   - Execute `npm start` to start the server using Polykey to inject the API key.
-   - Visit `http://localhost:3001` in your browser.
-   - Enter any city like "Miami" to check if the weather API fetches data correctly.
+   ```bash
+   polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_MAP_API_KEY
+   ```
 
-3. **Key Differences and Configuration**:
-   - In the `server.js`, instead of loading the API key from `.env`, the key is injected directly into the process environment by Polykey.
-   - The `package.json` contains a script modified to use `polykey secrets env` to start the server, ensuring the API key is securely injected.
+6. Run `npm start` to initiate the project using the Polykey environment management. This utilizes the `polykey secrets env` command detailed in the `package.json` script, which dynamically injects the API key into your environment. Similarly, check `localhost:3000` in your browser and input a city to see the weather data.
+
+## Comparison of Approaches
+
+Note the main differences in configuration between the `traditional-env` and `Polykey` branches, primarily visible in `server.js` and the `package.json` scripts. The `package.json` script in the Polykey branch includes a command that ensures the `polykey secrets env` command runs and completes before starting the server, which is crucial for the proper injection of secrets. Also we do not require .env in the server.js for Polykey, instead we use ...
 
 ## Conclusion
 
-Using Polykey enhances security by encrypting secrets and only exposing them where necessary, unlike the traditional `.env` method that stores secrets in plaintext. This method minimizes the risk of exposing sensitive data through source control or other means.
-
-### Pros and Cons
-
-- **Pros**:
-  - Enhanced security with encrypted storage of secrets.
-  - Seamless integration and minimal changes to existing code.
-- **Cons**:
-  - Requires initial setup of Polykey and understanding of its commands.
-  - Dependency on Polykey being correctly configured and running.
-
-### Encouragement for Adoption
-
-We encourage you to try replacing your `.env` usage with Polykey in your projects. Share your experiences and any feedback on this approach in the discussions or issues sections of this repository!
+This demonstration highlights the pros and cons of using Polykey versus traditional `.env` files. Polykey provides enhanced security through encryption and dynamic injection, which are critical in production environments and sensitive applications. We encourage you to try replacing your `.env` method with Polykey in your projects and share your experiences with us!
