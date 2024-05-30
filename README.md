@@ -34,30 +34,51 @@ Switch between the different branches to explore the implementations and configu
 
 ### Polykey Branch
 
-1. **Create a text file named "OPEN_WEATHER_MAP_API_KEY.txt"** and insert your API key as its content.
-2. Save this file as a secret named `OPEN_WEATHER_MAP_API_KEY` in a local directory outside of your repo.
+**Note:** The following requires prior setup (installation & bootstrapping) of Polykey. For guidance on setting up Polykey, refer to the [Polykey Documentation](https://polykey.com/docs/tutorials/polykey-cli/).
 
-**TIP:** Use the following terminal commands to quickly create the text file:
+1. **Create a Temporary Text File:**
+   Somewhere on your local directory of your machine, outside of the repo, create a temporary text file named **"OPEN_WEATHER_MAP_API_KEY.txt"** and insert the value of your API key into the file.
+
+   **TIP:** Use the following terminal commands to quickly create the text file:
+
+   ```bash
+   echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
+   ```
+
+   **Important Configuration Notes:**
+
+   - If you're following this demo, you must use the same VaultName "**Weather-Ops**" and secret name "**OPEN_WEATHER_MAP_API_KEY**".
+   - If you choose to use a different VaultName or secret name, ensure you configure the **package.json** and **server.js** scripts accordingly to match these names.
+
+2. **Create a Vault:**
+
+First, create a vault named "Weather-Ops" to hold your secret. This should be done after starting your Polykey agent:
 
 ```bash
-echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
+polykey vaults create Weather-Ops
 ```
 
-4. Create your vault
-   ```bash
-   polykey vaults create Weather-Ops
-   ```
-5. Add your secret to the vault
+3. **Add Your Environment Variable as a Secret:**
 
-   ```bash
-   polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_MAP_API_KEY
-   ```
+Add your environment variable to the vault, making it a secret:
 
-6. Run `npm start` to initiate the project using the Polykey environment management. This utilizes the `polykey secrets env` command detailed in the `package.json` script, which dynamically injects the API key into your environment. Similarly, check `localhost:3000` in your browser and input a city to see the weather data.
+```bash
+polykey secrets create ./OPEN_WEATHER_MAP_API_KEY.txt Weather-Ops:OPEN_WEATHER_MAP_API_KEY
+```
+
+4. **Start the Project**
+
+Run **`npm start`** to initiate the project using Polykey's environment management. This command, detailed in the **`package.json`** script, dynamically injects the API key into your environment. Open your browser and navigate to **`localhost:3000`**. Input a city, such as "Miami", to verify that the API is functioning. Observe the terminal output from your **`npm start`** command to see the API key being utilized.
 
 ## Comparison of Approaches
 
-Note the main differences in configuration between the `traditional-env` and `Polykey` branches, primarily visible in `server.js` and the `package.json` scripts. The `package.json` script in the Polykey branch includes a command that ensures the `polykey secrets env` command runs and completes before starting the server, which is crucial for the proper injection of secrets. Also we do not require .env in the server.js for Polykey, instead we use ...
+Notice that we are not using .env anymore, yet the environment variables are working properly as shown by the functioning API.
+
+This is because the package.json script is configured to run the polykey secrets env command, injecting the api key into local dev environment, and then running the application in development which is searching the process.env
+
+This showcases how Polykey can securely manage and inject environment variables into your applications.
+
+after the polykey command injects the secret with the api key into your environment for the terminal session you did npm start with, which loads the env into the application at runtime.
 
 ## Conclusion
 
