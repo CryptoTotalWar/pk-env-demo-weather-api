@@ -74,11 +74,14 @@ Run **`npm start`** to initiate the project using Polykey's environment manageme
 
 Notice that we are not using .env anymore, yet the environment variables are working properly as shown by the functioning API.
 
-This is because the package.json script is configured to run the polykey secrets env command, injecting the api key into local dev environment, and then running the application in development which is searching the process.env
+Explain how this works
 
-This showcases how Polykey can securely manage and inject environment variables into your applications.
+```bash
+const port = process.env.PORT || 3000;
 
-after the polykey command injects the secret with the api key into your environment for the terminal session you did npm start with, which loads the env into the application at runtime.
+app.get("/", (req, res) => {
+  const apiKey = process.env.OPEN_WEATHER_MAP_API_KEY;
+```
 
 ## Conclusion
 
