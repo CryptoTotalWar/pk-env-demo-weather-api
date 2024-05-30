@@ -36,11 +36,12 @@ Switch between the different branches to explore the implementations and configu
 
 1. **Create a text file named "OPEN_WEATHER_MAP_API_KEY.txt"** and insert your API key as its content.
 2. Save this file as a secret named `OPEN_WEATHER_MAP_API_KEY` in a local directory outside of your repo.
-3. Use the following terminal commands to quickly add your secret in Polykey:
 
-   ```bash
-   echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
-   ```
+**TIP:** Use the following terminal commands to quickly create the text file:
+
+```bash
+echo "your_api_key_here" > OPEN_WEATHER_MAP_API_KEY.txt
+```
 
 4. Create your vault
    ```bash
